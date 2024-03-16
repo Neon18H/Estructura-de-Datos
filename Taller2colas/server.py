@@ -1,38 +1,35 @@
+# se debe instalar uvicorn: pip install uvicorn
+# se debe instalar FastAPI: pip install fastapi
+# se debe instalar pydantic: pip install pydantic
+# COmando para ejecutar el servidor uvicorn server:app --reload --port 8080
 from fastapi import FastAPI
+from models.vehiclemanager import Vehiclemanager
 from models import Vehicle
-from classes import vehicle_manager as vm
+from models import vehiclemanager as vm
 
 app = FastAPI()
+vehiclemanager = Vehiclemanager()
 
 @app.get("/")
 def read_root():
-    return {"message": "API is up and running"}
+    return {"Hello": "World"}
 
-@app.post("/register")             #recibe la info del regristar el vehiculo 
-def register(vehicle: Vehicle):
-    vm.add_vehicle(vehicle)
-    return {"data": vehicle.dict(), "message": "Vehicle registered successfully"}
+@app.get("/estado")
+def estado():
+    elementos = vehiclemanager.contar()
+    return {"status": "ok", "elementos": elementos}
 
-@app.get("/vehicles/pending")
-def get_pending_vehicles():
-    vehicles = vm.get_vehicles_to_be_tested()
-    return {"pending_vehicles": [vehicle.dict() for vehicle in vehicles]}
+@app.post("/encolar")
+def encolar(vehiculo: Vehicle):
+    vehiclemanager.encolar(vehiculo)
+    return {"status": "ok"}
 
-@app.get("/vehicles/tested")
-def get_tested_vehicles():
-    vehicles = vm.get_tested_vehicles()
-    return {"tested_vehicles": [vehicle.dict() for vehicle in vehicles]}
+@app.get("/desencolar")
+def desencolar():
+    elemento = vehiclemanager.desencolar()
+    return {"status": "ok", "elemento": elemento}
 
-@app.post("/vehicles/execute-tests")
-def execute_tests():
-    vehicle = vm.execute_tests_for_vehicle()
-    if vehicle:
-        return {"vehicle": vehicle.dict(), "message": "Tests executed successfully"}
-    return {"message": "No pending vehicles to test"}
-
-@app.delete("/vehicles/{tuition}/remove") #parametro dentro de la ruta, matricula, 
-def remove_vehicle(tuition: str):
-    vehicle_removed = vm.remove_pending_vehicle(tuition)
-    if vehicle_removed:
-        return {"message": "Vehicle removed successfully"}
-    return {"message": "Vehicle not found or not pending"}
+@app.get("/ver_todos")
+def ver_todos():
+    elementos = vehiclemanager.ver_listado()
+    return {"status": "ok", "elementos": elementos}
