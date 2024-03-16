@@ -2,7 +2,7 @@ class MotorElectrico :
     potencia = None
     def encender (self):
        print("Encendiendo motor electrico")
-    def __init__(self)
+    def __init__(self):
        pass
 motor1= MotorElectrico()
 motor1.potencia=1000
