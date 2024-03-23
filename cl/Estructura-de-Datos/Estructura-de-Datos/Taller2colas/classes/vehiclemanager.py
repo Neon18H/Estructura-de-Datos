@@ -6,20 +6,20 @@ class Node:
         self.value = value
         self.next = None
 
-class VehicleManager:
+class VehicleFa:
     def _init_(self):
         self.first_pending = None
         self.last_pending = None
         self.first_tested = None
         self.last_tested = None
 
-    def is_empty(self, queue: str):
+    def verifica_colas(self, queue: str):
         if queue == "pending":
             return self.first_pending is None
         elif queue == "tested":
             return self.first_tested is None
 
-    def enqueue(self, value: Vehicle, queue: str):
+    def agregar_new_nodo(self, value: Vehicle, queue: str):
         new_node = Node(value)
         if queue == "pending":
             if self.is_empty(queue):
@@ -36,11 +36,11 @@ class VehicleManager:
                 self.last_tested.next = new_node
                 self.last_tested = new_node
 
-    def add_vehicle(self, vehicle: Vehicle):
+    def añadir_vehicle(self, vehicle: Vehicle):
         vehicle.tests = self.add_technical_tests(vehicle.type)
         self.enqueue(vehicle, "pending")
 
-    def add_technical_tests(self, vehicle_type: str):
+    def añadir_technical_tests(self, vehicle_type: str):
         test_types = {
             'moto': ['frenos', 'luces', 'gases', 'llantas'],
             'carro': ['frenos', 'luces', 'gases', 'llantas'],
@@ -82,7 +82,7 @@ class VehicleManager:
             print("No hay vehículos pendientes para revisar.")
             return None
 
-    def remove_pending_vehicle(self, tuition: str):
+    def eliminar_pending_vehicle(self, tuition: str):
         if not self.is_empty("pending"):
             current = self.first_pending
             previous = None
@@ -99,4 +99,4 @@ class VehicleManager:
                 current = current.next
         return False
 
-vehicle_manager = VehicleManager()
+vehicle_manager = VehicleFa()
